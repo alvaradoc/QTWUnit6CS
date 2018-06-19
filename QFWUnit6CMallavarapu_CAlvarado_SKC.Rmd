@@ -1020,8 +1020,10 @@ Based on our above methods and analysis we first observed that using the textboo
 
 
 # References  
-1.Lang, D. T., & Nolan, D. A. (2015). Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving. CRC Press.  
-2.Ding, Bin, et al. “Application of RTLS in Warehouse Management Based on RFID and Wi-Fi.” IEEE Xplore, 12 Oct. 2008, ieeexplore.ieee.org/abstract/document/4679157/.  
+1.Lang, D. T., & Nolan, D. A. (2015). Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving. CRC Press. 
+
+2.Ding, Bin, et al. “Application of RTLS in Warehouse Management Based on RFID and Wi-Fi.” IEEE Xplore, 12 Oct. 2008, ieeexplore.ieee.org/abstract/document/4679157/. 
+
 3.Tarrío, P., et al. “Weighted Least Squares Techniques for Improved Received Signal Strength Based Localization.” Sensors, 2011
 
 
