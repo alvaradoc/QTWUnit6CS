@@ -5,17 +5,17 @@ output:
   word_document: default
 ---
 # Authors: Chiranjeevi Mallavarapu, Cynthia Alvarado, Sabitri KC
-## 1.1 Abstract
-In this case study, we examine Real Time Location systems (RTLS) to predict a location using indoor positioning systems based on retrieving the media access control (MAC) address of a device.  We use k-nearest neighbors (KNN) to determine locations of devices within a defined floorplan. We examine the potential issues regarding the use or non-use of certain MAC addresses and investigate the effect on accuracy of an indoor positioning system developed by Nolan and Temple Lang. We also hoped to try another possible enhancement approach using a weighted k-nearest neighbors for determining location but due to limited time left we could not proceed further. But based on the initial data exploration, as signal stregths seemed to have strong relation to distance, we expect that weighted KNN gives a better result.
+## 1 Abstract
+In this case study, we examine Real Time Location Analysis (RTLS) to predict a location using indoor positioning systems based on retrieving the media access control (MAC) address of a device.  We use k-nearest neighbors (KNN) to determine locations of devices within a defined floorplan. We examine the potential issues regarding the use or non-use of certain MAC addresses and investigate the effect on accuracy of an indoor positioning system developed by Nolan and Temple Lang. We also hoped to try another possible enhancement approach using a weighted k-nearest neighbors for determining location but due to limited time left we could not proceed further. But based on the initial data exploration, as signal stregths seemed to have strong relation to distance, we expect that weighted KNN gives a better result.
 
-# 1.2 Introduction
-Real Time Location Systems have a wide range of practical applications. These RTLS applications are called indoor positioning systems.  In particular, indoor positioning can help with identifying personnel within the building, ensuring the safety of those individuals in emergency situations, for example.  It may also deter theft by identifying valuable assets, tracking the position of the asset within the building or being notified if it is outside the confines of the building. Tracing the previous location, identifying the current location and predicting the future locations of a package is a popular use of RTLS technology. Proliferation of tracking tags with the advancement in wireless technologies have made real-time location systems ubiquitous in every sector like inventory management, livestock maintenance, personnel tracking, healthcare manufacturing and navigation.
+## 2 Introduction
+Real Time Location Systems(RTLS) have a wide range of practical applications. These RTLS applications are called indoor positioning systems.  In particular, indoor positioning can help with identifying personnel within the building, ensuring the safety of those individuals in emergency situations, for example.  It may also deter theft by identifying valuable assets, tracking the position of the asset within the building or being notified if it is outside the confines of the building. Tracing the previous location, identifying the current location and predicting the future locations of a package is a popular use of RTLS technology. Proliferation of tracking tags with the advancement in wireless technologies have made real-time location systems ubiquitous in every sector like inventory management, livestock maintenance, personnel tracking, healthcare manufacturing and navigation.
 
 In this paper, we will be doing a more thorough data analysis using the data that is available for the Nolan and Lang textbook. The data were collected from a single mobile device at 166 positions on the floor plan of the building. Eight orientation angles were considered at each location and 110 readings were taken for each (x, y) position, angle combination. For each reading, 6 access points provide signal strength data to the mobile device as orginally considered by the authors. Nolan and Lang provide an indoor positioning system using signal strength data and a mean-based k-nearest neighbors approach using six access points and drop one access point which was originally in the data. 
 
 In addition to reviewing above author's approach in the start, we will also assess 2 different models one with utilizing the access point which was previously dropped on author’s model and another with including the new MAC and excluding the one considered in authors model. We also implement a weighted k-nearest neighbors model for predicting the location of previously unseen signal strength data rather than their mean-based k-nearest neighbors approach and improve the analysis.
 
-#1.3 BACKGROUND
+## 3 Background
  The data used in this study consists of an “offline” training set and an “online” test set as given by the textbook. The offline data contains measurements of signal strength from a grid of specified measurement points that are one meter apart from each other, as indicated by grey colored dot in the text book. The "online" data set consists of similar readings of subset of the locations from above as indicate in bold black spots in the textbook, which also gives us the physical location of the same. 
  
  There are 6 wireless access points and the signal for each access point is measured from each of these points at 8 different rotational angles that are 45 degrees apart. 
@@ -33,11 +33,11 @@ kable(VariablesTbl[1:5, ], caption = "Table 1: Variable Description and Types
 ```
 
 
-#1.4 Methods
+## 4 Methods
 
 Before discussing about the methods of analysis, we decided to clean, transform and explore our raw data and prepare it for analysis. Our given raw data was provided in 2 separate datasets as offline and online which we will use as training and test data sets. We will be mainly focusing on training dataset for analysis purpose. The training dataset consists of 151,392 lines but according to data collection process we were expecting 146,080 lines in the files (166 locations*8 angles*110recordings).so the differences between two which is 5,312 is the number of comment lines. We extract the data from input file and manipulate it to convert into a structure that is easier to analyze since the original structure contains a non-uniform number of readings for each line. A new dataset for analysis was created by dropping the extra access points, normalizing the orientation values and translating the time variables as in format shown in Table 1.
 
-##1.4.1 Data Cleaning and Exploration
+## 4.1 Data Cleaning and Exploration
 
 Before we are able to analyze this signal data , we must first clean and explore the data.  We will start byreading the data file into a variable named txt.  
 
@@ -407,7 +407,7 @@ lines(x = 70:120, y = lo.obj.pr, col = "#4daf4a", lwd = 2)
 ```
 The mean and median do not appear to be significantly different from each other, which means the data does not have a substantial skew.
 
-##1.4.3 Our Methodology for analysis and prediction using k-Nearest Neighbors 
+## 4.3 Methodology for analysis and prediction using k-Nearest Neighbors 
 
 We will now use k-Nearest Neighbors (k-NN) to determine location from access point signal strength.  k-NN works by measuring the distance between a new point and it's neighboring points.  The k closest neighboring points to the newest point are used to vote on the value for the new point.  For example, let's say k is equal to 5.  If 3 of the 5 closest points are red and 2 of the 5 closest points are blue, then we assign a value of red to the new point.  
 
@@ -691,7 +691,7 @@ calcError(estXYk5, actualXY)
 ```
 The error rate of 454 for the estimation created using 5 nearest neighbors is lower than the estimations that used both 1 and 3 nearest neighbors (579 and 483 respectively).  
 
-##1.4.4 Casestudy on the skipped MAC address: a model with Including it, a model with replacing it
+## 4.4 Omitted MAC address: a model with Including it, a model with replacing it
 
 When cleaning this data, the access points with MAC addresses of 00:0f:a3:39:e1:c0 and 00:0f:a3:39:dd:cd looked anomalous.  We decided to keep the first and remove the second.  We will now rerun the kNN analysis using both of these MAC addresses as well as using the second address without the first.  Since this MAC address has been removed from the original offline dataset, this data needs to be reconstructed.
 ```{r}
@@ -841,7 +841,7 @@ estXYk6 = predXY(newSignals = onlineSummaryRedo[ , 6:11],
 
 calcError(estXYk6, actualXYRedo)
 ```
-##1.4.5 conclusion : Including the MAC address in question 
+## 4.5 conclusion : Including the MAC address in question 
 When using all 7 access point MAC addresses, we get an error rate of 448, which is slightly better than the error rate (454) for the analysis that not include 00:0f:a3:39:dd:cd.  Next, we will run the analysis again using 00:0f:a3:39:dd:cd, but removing the access point with the MAC address of 00:0f:a3:39:e1:c0.  We will again need to rebuild the data set.
 
 ```{r}
@@ -991,11 +991,11 @@ estXYk2 = predXY(newSignals = onlineSummaryRedo2[ , 6:11],
 
 calcError(estXYk2, actualXYRedo2)
 ```
-##1.4.6 conclusion : Replacing the MAC address in question in the place of MAC address considered by the Authors
+## 4.6 conclusion : Replacing the MAC address in question in the place of MAC address considered by the Authors
 
 The error rate of 497 using this MAC address is worse than both of the other datasets.  We know that only one of these two devices is an actual access point.  Given that this MAC address used on its own produces a much worse error rate than the other MAC address and using both MAC addresses produces similar results to the dataset that only uses 00:0f:a3:39:e1:c0, we will go forward with the original dataset that includes 00:0f:a3:39:e1:c0 and not 00:0f:a3:39:dd:cd.  
 
-## 1.4.7 Weighted k-Nearest Neighbors Analysis
+## 4.7 Weighted k-Nearest Neighbors Analysis
 Up to this point in this analysis, each nearest neighbor has counted the same as all of the others.  A more accurate might be to assign weights based on how far away the nearest neighbors are from the datapoint being analyzed.  
 ```{r}
 library(dplyr)
@@ -1014,16 +1014,10 @@ wtOfflineByAvgSig = wtSignals(offlineSummary)
 wtOnlineByAvgSig = wtSignals(onlineSummary)
 ```
 
-#1.5 Results
+## 5 Results
 
 Based on our above methods and analysis we first observed that using the textbook approach of calculating the location based on K nearest neighbours including the MAC address, gave us an error rate of 454. As required by the case study we went further to assess if by including the MAC adddress in question improved its accuracy in predicting the location. It seems like the error rate after including the MAC was 402, which is definitely an improvement over the textbook approach. We then, tried by replacing the MAC considered by the authors with this additional MAC and the error rate increased to 497 which is worse than either case. So we conclude that in this scenario, including data from all 7 MAC addresses gives better location predictability. We were hoping to also finish the weighted average analysis for KNN, but due to limited time left, we couldnot finish it.
 
 
-# References  
-1. Lang, D. T., & Nolan, D. A. (2015). Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving. CRC Press. 
-
-2. Ding, Bin, et al. “Application of RTLS in Warehouse Management Based on RFID and Wi-Fi.” IEEE Xplore, 12 Oct. 2008,    ieeexplore.ieee.org/abstract/document/4679157/. 
-
-3. Tarrío, P., et al. “Weighted Least Squares Techniques for Improved Received Signal Strength Based Localization.” Sensors, 2011
-
-
+## References  
+Lang, D. T., & Nolan, D. A. (2015). Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving. CRC Press.
